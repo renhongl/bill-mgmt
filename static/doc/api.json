@@ -1,0 +1,352 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Bill Management",
+    "version": "1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "token",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "definitions": {
+    "mailSchema": {
+      "type": "object",
+      "properties": {
+        "mail": {
+          "type": "string",
+          "example": "1075220132@qq.com"
+        },
+        "username": {
+          "type": "string",
+          "example": "lrh"
+        }
+      }
+    },
+    "loginSchema": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "lrh"
+        },
+        "password": {
+          "type": "string",
+          "example": "112233"
+        }
+      }
+    },
+    "registerSchema": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "lrh"
+        },
+        "password": {
+          "type": "string",
+          "example": "112233"
+        },
+        "mail": {
+          "type": "string",
+          "example": "1075220132@qq.com"
+        },
+        "code": {
+          "type": "string",
+          "example": "542324"
+        }
+      }
+    },
+    "apiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "Success"
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    },
+    "user": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "lrh"
+        },
+        "avator": {
+          "type": "string",
+          "example": "/avator/avator.png"
+        },
+        "intro": {
+          "type": "string",
+          "example": "Today is a good day"
+        },
+        "gender": {
+          "type": "string",
+          "example": "male"
+        },
+        "birthday": {
+          "type": "integer",
+          "example": 12144534
+        },
+        "place": {
+          "type": "string",
+          "example": "SingaporeA/ng Mo Kio"
+        },
+        "news": {
+          "type": "integer",
+          "example": 32
+        },
+        "follower": {
+          "type": "integer",
+          "example": 65
+        },
+        "followee": {
+          "type": "integer",
+          "example": 92
+        },
+        "love": {
+          "type": "integer",
+          "example": 23
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/mail": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Send a verify mail for register",
+        "produces": [
+          "application/json"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/mailSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register a new user",
+        "produces": [
+          "application/json"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/registerSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#definitions/apiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login by username and password",
+        "produces": [
+          "application/json"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/loginSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/apiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/file/{type}": {
+      "post": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Upload file to server",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "description": "File type for upload",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "avator or common"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/user/{username}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Query user information by username",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "description": "User name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Update user information",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "User ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/user"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#definitions/apiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

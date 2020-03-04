@@ -7,7 +7,7 @@ const Store = require('../common/store');
 
 const store = new Store();
 
-const generateCode = function(len) {
+const generateCode = function (len) {
   const data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   let ret = '';
   for (let i = 0; i < len; i++) {
@@ -219,8 +219,68 @@ const login = async ctx => {
   }
 };
 
+/**
+ * @swagger
+ * /auth/keepAlive:
+ *    post:
+ *      tags:
+ *        - Auth
+ *      summary: Extend token
+ *      produces:
+ *        - application/json
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: "#/definitions/keepAliveSchema"
+ *      responses:
+ *        401:
+ *           description: Invalid token
+ *        200:
+ *          description: Success
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: "#/definitions/apiResponse"
+ *
+ */
+const keepAlive = async ctx => {
+  try {
+    const { body } = ctx.request;
+    const user = await User.findOne({ username: body.username });
+    if (!user) {
+      ctx.status = 401;
+      ctx.body = {
+        code: 401,
+        message: 'User name error',
+      };
+      return;
+    }
+    ctx.status = 200;
+    ctx.body = {
+      code: 200,
+      message: 'Token extended, please use new token',
+      data: {
+        token: jsonwebtoken.sign(
+          {
+            data: user,
+            exp: Math.floor(Date.now() / 1000) + 60 * 60, // 60 seconds * 60 minutes = 1 hour
+          },
+          SECRET,
+        ),
+        user,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    ctx.status = 500;
+  }
+}
+
 module.exports = {
   register,
   login,
   verifyMail,
+  keepAlive,
 };

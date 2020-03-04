@@ -8,7 +8,7 @@
 
 
 
-功能文档：[前端文档](https://github.com/renhongl/news-app)
+<!-- 功能文档：[前端文档](https://github.com/renhongl/news-app) -->
 
 
 # 安装

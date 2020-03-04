@@ -45,6 +45,15 @@
         }
       }
     },
+    "keepAliveSchema": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "lrh"
+        }
+      }
+    },
     "registerSchema": {
       "type": "object",
       "properties": {
@@ -63,6 +72,15 @@
         "code": {
           "type": "string",
           "example": "542324"
+        }
+      }
+    },
+    "createUniSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "江汉大学"
         }
       }
     },
@@ -224,6 +242,42 @@
         }
       }
     },
+    "/auth/keepAlive": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Extend token",
+        "produces": [
+          "application/json"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/keepAliveSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/apiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
     "/file/{type}": {
       "post": {
         "tags": [
@@ -260,6 +314,84 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/university/all": {
+      "get": {
+        "tags": [
+          "Univsersity"
+        ],
+        "summary": "Query all university",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/university": {
+      "post": {
+        "tags": [
+          "Univsersity"
+        ],
+        "summary": "Create university",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/createUniSchema"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/university/{name}": {
+      "delete": {
+        "tags": [
+          "Univsersity"
+        ],
+        "summary": "Delete university",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "description": "University name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success"

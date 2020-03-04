@@ -43,6 +43,15 @@ module.exports = {
                 }
             }
         },
+        keepAliveSchema: {
+            type: 'object',
+            properties: {
+                username: {
+                    type: 'string',
+                    example: 'lrh'
+                }
+            }
+        },
         registerSchema: {
             type: 'object',
             properties: {
@@ -62,6 +71,15 @@ module.exports = {
                     type: 'string',
                     example: "542324"
                 }
+            }
+        },
+        createUniSchema: {
+            type: 'object',
+            properties: {
+                name: {
+                    type: 'string',
+                    example: '江汉大学'
+                },
             }
         },
         apiResponse: {

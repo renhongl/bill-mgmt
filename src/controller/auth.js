@@ -183,7 +183,6 @@ const login = async ctx => {
     const { body } = ctx.request;
     const user = await User.findOne({ username: body.username });
     if (!user) {
-      ctx.status = 401;
       ctx.body = {
         code: 401,
         message: 'User name error',
@@ -207,7 +206,6 @@ const login = async ctx => {
         },
       };
     } else {
-      ctx.status = 401;
       ctx.body = {
         code: 401,
         message: 'Password error',

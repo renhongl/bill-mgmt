@@ -124,7 +124,6 @@ const register = async ctx => {
       console.log(body.code);
       console.log(store.getItem(body.mail));
       if (body.code !== store.getItem(body.mail)) {
-        ctx.status = 401;
         ctx.body = {
           code: 401,
           message: 'Verify code is invalid',
@@ -140,7 +139,6 @@ const register = async ctx => {
         data: user,
       };
     } else {
-      ctx.status = 406;
       ctx.body = {
         code: 406,
         message: 'User name existed',

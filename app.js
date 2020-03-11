@@ -10,6 +10,7 @@ const koaBody = require('koa-body');
 const { getUser, updateUser } = require('./src/controller/user');
 const { register, login, verifyMail, keepAlive } = require('./src/controller/auth');
 const { searchUniversity, createUniversity, deleteUniversity, updateUniversity } = require('./src/controller/university');
+const { searchTeacher, createTeacher, deleteTeacher, updateTeacher } = require('./src/controller/teacher');
 const { connectDB } = require('./src/common/db');
 const { errorHandle } = require('./src/common/errorHandle');
 const {
@@ -74,6 +75,10 @@ router
   .post('/university', createUniversity)
   .delete('/university/:id', deleteUniversity)
   .put('/university/', updateUniversity)
+  .post('/teacher/search', searchTeacher)
+  .post('/teacher', createTeacher)
+  .delete('/teacher/:id', deleteTeacher)
+  .put('/teacher/', updateTeacher)
 
 
 // Apply route middleware

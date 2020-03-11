@@ -73,6 +73,23 @@ module.exports = {
                 }
             }
         },
+        searchSchema: {
+            type: 'object',
+            properties: {
+                index: {
+                    type: 'number',
+                    example: 0
+                },
+                total: {
+                    type: 'number',
+                    example: 10
+                },
+                searchWord: {
+                    type: 'string',
+                    example: ''
+                },
+            }
+        },
         createUniSchema: {
             type: 'object',
             properties: {

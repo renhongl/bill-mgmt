@@ -1,12 +1,12 @@
-const University = require('../models/university');
+const Teacher = require('../models/teacher');
 
 /**
  * @swagger
- * /university/search:
+ * /teacher/search:
  *    post:
  *      tags:
- *        - Univsersity
- *      summary: Search university
+ *        - Teacher
+ *      summary: Search teacher
  *      requestBody:
  *       required: true
  *       content:
@@ -22,7 +22,7 @@ const University = require('../models/university');
  *          description: Success
  *
  */
-const searchUniversity = async (ctx, next) => {
+const searchTeacher = async (ctx, next) => {
     try {
         const { body } = ctx.request;
         let index = body.index || 0;
@@ -30,23 +30,24 @@ const searchUniversity = async (ctx, next) => {
         let sortKey = body.sortKey || 'name';
         let asc = body.asc || 1;
         let searchWord = body.searchWord || '';
-        let uniArr, totalRecords;
+        let teaArr, totalRecords;
         if (!searchWord) {
-            uniArr = await University.find({}).sort({ [sortKey]: asc });
+            teaArr = await Teacher.find({}).sort({ [sortKey]: asc });
         } else {
-            uniArr = await University.find({$or:[{
-                name: new RegExp("\w*"+ searchWord)},
-                {address: new RegExp("\w*"+ searchWord)
-            }]}).sort({ [sortKey]: asc });
+            teaArr = await Teacher.find(
+                {$or:[{name: new RegExp("\w*"+ searchWord)},
+                {uni: new RegExp("\w*"+ searchWord)},
+                {phone: new RegExp("\w*"+ searchWord)}
+            ]}).sort({ [sortKey]: asc });
         }
-        totalRecords = uniArr.length;
-        uniArr = uniArr.splice(index * total, total);
+        totalRecords = teaArr.length;
+        teaArr = teaArr.splice(index * total, total);
         ctx.status = 200;
-        if (uniArr) {
+        if (teaArr) {
             ctx.body = {
                 code: 200,
                 message: 'Success',
-                data: uniArr,
+                data: teaArr,
                 total: totalRecords
             };
         } else {
@@ -64,11 +65,11 @@ const searchUniversity = async (ctx, next) => {
 
 /**
  * @swagger
- * /university:
+ * /teacher:
  *    post:
  *      tags:
- *        - Univsersity
- *      summary: Create university
+ *        - Teacher
+ *      summary: Create teacher
  *      requestBody:
  *       required: true
  *       content:
@@ -84,37 +85,37 @@ const searchUniversity = async (ctx, next) => {
  *          description: Success
  *
  */
-const createUniversity = async (ctx, next) => {
+const createTeacher = async (ctx, next) => {
     try {
         const { body } = ctx.request;
-        if (!body.name) {
+        if (!body.name || !body.uni) {
             ctx.status = 400;
             ctx.body = {
                 code: 400,
-                message: `Bad request, name is required`,
+                message: `Bad request, name and university is required`,
             };
             return;
         }
 
-        let uni = await University.find({ name: body.name });
+        let tea = await Teacher.find({ name: body.name });
         if (!body.address) {
             body.address = '未填写';
         }
 
-        if (!uni.length) {
-            const newUniversity = new University(body);
-            let university = await newUniversity.save();
+        if (!tea.length) {
+            const newUniversity = new Teacher(body);
+            let teacher = await newUniversity.save();
             ctx.status = 200;
             ctx.body = {
                 code: 200,
                 message: 'Success',
-                data: university,
+                data: teacher,
             };
         } else {
             ctx.status = 406;
             ctx.body = {
                 code: 406,
-                message: 'University existed',
+                message: 'Teacher existed',
             };
         }
     } catch (error) {
@@ -125,11 +126,11 @@ const createUniversity = async (ctx, next) => {
 
 /**
  * @swagger
- * /university:
+ * /teacher:
  *    put:
  *      tags:
- *        - Univsersity
- *      summary: Update university
+ *        - Teacher
+ *      summary: Update teacher
  *      requestBody:
  *       required: true
  *       content:
@@ -145,7 +146,7 @@ const createUniversity = async (ctx, next) => {
  *          description: Success
  *
  */
-const updateUniversity = async (ctx, next) => {
+const updateTeacher = async (ctx, next) => {
     try {
         const { body } = ctx.request;
         if (!body.id) {
@@ -157,7 +158,7 @@ const updateUniversity = async (ctx, next) => {
             return;
         }
 
-        let uni = await University.findOneAndUpdate({ _id: body.id }, body);
+        let tea = await Teacher.findOneAndUpdate({ _id: body.id }, body);
         ctx.status = 200;
         ctx.body = {
             code: 200,
@@ -173,16 +174,16 @@ const updateUniversity = async (ctx, next) => {
 
 /**
  * @swagger
- * /university/{id}:
+ * /teacher/{id}:
  *    delete:
  *      tags:
- *        - Univsersity
- *      summary: Delete university
+ *        - Teacher
+ *      summary: Delete teacher
  *      produces:
  *        - application/json
  *      parameters:
  *       - name: id
- *         description: University id
+ *         description: Teacher id
  *         in: path
  *         required: true
  *         schema:
@@ -194,17 +195,17 @@ const updateUniversity = async (ctx, next) => {
  *          description: Success
  *
  */
-const deleteUniversity = async (ctx, next) => {
+const deleteTeacher = async (ctx, next) => {
     try {
         const id = ctx.params.id;
         console.log('delete id: ' + id);
-        let uni = await University.findOneAndDelete({_id: id});
+        let tea = await Teacher.findOneAndDelete({_id: id});
         ctx.status = 200;
-        if (uni) {
+        if (tea) {
             ctx.body = {
                 code: 200,
                 message: 'Delete Success',
-                data: uni,
+                data: tea,
             };
         } else {
             ctx.body = {
@@ -220,8 +221,8 @@ const deleteUniversity = async (ctx, next) => {
 };
 
 module.exports = {
-    searchUniversity,
-    createUniversity,
-    deleteUniversity,
-    updateUniversity,
+    searchTeacher,
+    createTeacher,
+    deleteTeacher,
+    updateTeacher,
 };

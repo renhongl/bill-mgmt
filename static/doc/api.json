@@ -75,6 +75,23 @@
         }
       }
     },
+    "searchSchema": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "number",
+          "example": 0
+        },
+        "total": {
+          "type": "number",
+          "example": 10
+        },
+        "searchWord": {
+          "type": "string",
+          "example": ""
+        }
+      }
+    },
     "createUniSchema": {
       "type": "object",
       "properties": {
@@ -324,12 +341,137 @@
         }
       }
     },
+    "/teacher/search": {
+      "post": {
+        "tags": [
+          "Teacher"
+        ],
+        "summary": "Search teacher",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/searchSchema"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/teacher": {
+      "post": {
+        "tags": [
+          "Teacher"
+        ],
+        "summary": "Create teacher",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/createUniSchema"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Teacher"
+        ],
+        "summary": "Update teacher",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/createUniSchema"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/teacher/{id}": {
+      "delete": {
+        "tags": [
+          "Teacher"
+        ],
+        "summary": "Delete teacher",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Teacher id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
     "/university/search": {
       "post": {
         "tags": [
           "Univsersity"
         ],
         "summary": "Search university",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/searchSchema"
+              }
+            }
+          }
+        },
         "produces": [
           "application/json"
         ],

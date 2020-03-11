@@ -54,8 +54,8 @@ const verifyMail = async = (ctx) => {
     }, 1000 * 60 * 30);
     send({
       to: body.mail,
-      subject: '[Bill Mgmt]Register New Account',
-      html: `Hello <b>${body.username}</b>,<br/> you are trying to register an account for Bill Mgmt system. <br/>Your verify code is: <b style="color: red">${code}</b>, please verify it in 30 minutes.`,
+      subject: '[账单管理系统]注册新账号',
+      html: `你好 <b>${body.username}</b>,<br/> 你正在给账单管理系统注册一个新账号 <br/>你的验证码是: <b style="color: red">${code}</b>, 请在30分钟之内验证。`,
     }).then((data) => {
       console.log('Register mail sent');
       ctx.status = 200;

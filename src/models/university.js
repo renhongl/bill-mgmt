@@ -3,6 +3,7 @@ const Schema = Mongoose.Schema;
 
 const UniversitySchema = new Schema({
   name: String,
+  address: String,
 });
 
 const University = Mongoose.model('University', UniversitySchema);

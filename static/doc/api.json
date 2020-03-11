@@ -324,12 +324,12 @@
         }
       }
     },
-    "/university/all": {
-      "get": {
+    "/university/search": {
+      "post": {
         "tags": [
           "Univsersity"
         ],
-        "summary": "Query all university",
+        "summary": "Search university",
         "produces": [
           "application/json"
         ],
@@ -370,9 +370,36 @@
             "description": "Invalid token"
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Univsersity"
+        ],
+        "summary": "Update university",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/createUniSchema"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
       }
     },
-    "/university/{name}": {
+    "/university/{id}": {
       "delete": {
         "tags": [
           "Univsersity"
@@ -383,8 +410,8 @@
         ],
         "parameters": [
           {
-            "name": "name",
-            "description": "University name",
+            "name": "id",
+            "description": "University id",
             "in": "path",
             "required": true,
             "schema": {

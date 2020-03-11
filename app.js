@@ -9,7 +9,7 @@ const jwt = require('koa-jsonwebtoken').default;
 const koaBody = require('koa-body');
 const { getUser, updateUser } = require('./src/controller/user');
 const { register, login, verifyMail, keepAlive } = require('./src/controller/auth');
-const { getAllUniversity, createUniversity, deleteUniversity } = require('./src/controller/university');
+const { searchUniversity, createUniversity, deleteUniversity, updateUniversity } = require('./src/controller/university');
 const { connectDB } = require('./src/common/db');
 const { errorHandle } = require('./src/common/errorHandle');
 const {
@@ -70,9 +70,10 @@ router
   .get('/user/:username', getUser)
   .put('/user/:id', updateUser)
   .post('/file/:type', fileUpload)
-  .get('/university/all', getAllUniversity)
+  .post('/university/search', searchUniversity)
   .post('/university', createUniversity)
-  .delete('/university/:name', deleteUniversity)
+  .delete('/university/:id', deleteUniversity)
+  .put('/university/', updateUniversity)
 
 
 // Apply route middleware

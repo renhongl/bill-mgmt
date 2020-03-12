@@ -68,7 +68,7 @@ router
   .post('/auth/mail/', verifyMail)
   .post('/auth/login', login)
   .post('/auth/keepAlive', keepAlive)
-  .get('/user/:username', getUser)
+  .get('/user/:id', getUser)
   .put('/user/:id', updateUser)
   .post('/file/:type', fileUpload)
   .post('/university/search', searchUniversity)

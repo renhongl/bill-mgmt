@@ -3,15 +3,15 @@ const Mongoose = require('mongoose');
 
 /**
  * @swagger
- * /user/{username}:
+ * /user/{id}:
  *    get:
  *      tags:
  *        - User
- *      summary: Query user information by username
+ *      summary: Query user information by id
  *      produces:
  *        - application/json
  *      parameters:
- *        - name: username
+ *        - name: id
  *          description: User name
  *          in: path
  *          required: true
@@ -26,8 +26,8 @@ const Mongoose = require('mongoose');
  */
 const getUser = async (ctx, next) => {
   try {
-    const username = ctx.params.username;
-    let user = await User.findOne({username}, { _id: 0, password: 0});
+    const id = ctx.params.id;
+    let user = await User.findOne({_id: id}, { password: 0});
     ctx.status = 200;
     if (user) {
       ctx.body = {
@@ -38,7 +38,7 @@ const getUser = async (ctx, next) => {
     } else {
       ctx.body = {
         code: 200,
-        message: `No user name: ${username}`,
+        message: `No user id: ${id}`,
         data: null,
       };
     }
@@ -86,7 +86,7 @@ const updateUser = async (ctx, next) => {
     const request = ctx.request;
     ctx.status = 200;
     const id = ctx.params.id;
-    let currUser = await User.findOne(new Mongoose.Types.ObjectId(id));
+    let currUser = await User.findOne({_id: id});
     if (currUser) {
       let newUser = request.body;
       if (newUser.password) {
@@ -95,16 +95,14 @@ const updateUser = async (ctx, next) => {
       if (newUser.username) {
         delete newUser.username;
       }
-      let res = await User.updateOne({_id: new Mongoose.Types.ObjectId(id)}, newUser);
+      let res = await User.updateOne({_id: id}, newUser);
       console.log(res);
-      if (res.ok) {
-        ctx.status = 200;
-        ctx.body = {
-          code: 200,
-          message: 'Success',
-          data: newUser,
-        };
-      }
+      ctx.status = 200;
+      ctx.body = {
+        code: 200,
+        message: 'Success',
+        data: newUser,
+      };
     } else {
       ctx.body = {
         code: 200,

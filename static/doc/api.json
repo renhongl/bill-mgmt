@@ -571,18 +571,18 @@
         }
       }
     },
-    "/user/{username}": {
+    "/user/{id}": {
       "get": {
         "tags": [
           "User"
         ],
-        "summary": "Query user information by username",
+        "summary": "Query user information by id",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "username",
+            "name": "id",
             "description": "User name",
             "in": "path",
             "required": true,
@@ -599,9 +599,7 @@
             "description": "Invalid token"
           }
         }
-      }
-    },
-    "/user/{id}": {
+      },
       "put": {
         "tags": [
           "User"

@@ -58,7 +58,7 @@ app.use(
     },
     key: TOKEN_KEY,
   }).unless({
-    path: [/\/auth\/register/, /\/auth\/mail/, /\/auth\/login/, /\/doc/],
+    path: [/\/auth\/register/, /\/auth\/mail/, /\/auth\/login/, /\/doc/, /\/gui\/*/],
   }),
 );
 
@@ -99,4 +99,4 @@ app.listen(PORT);
 
 // Print log on console
 console.log('Server Running: http://localhost:' + PORT);
-console.log('Swagger Running: http://localhost:' + 3000 + '/doc');
+console.log('Swagger Running: http://localhost:' + PORT + '/doc');

@@ -375,7 +375,9 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         imports: [
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
             _angular_common__WEBPACK_IMPORTED_MODULE_7__["CommonModule"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterModule"].forRoot(appRoutes),
+            _angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterModule"].forRoot(appRoutes, {
+                useHash: true,
+            }),
             _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClientModule"]
         ],
         providers: [],
@@ -505,7 +507,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SERVER", function() { return SERVER; });
 
 
-const SERVER = 'http://localhost:3000';
+const SERVER = 'http://47.244.173.138:80';
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     AUTH_LOGIN: SERVER + '/auth/login',

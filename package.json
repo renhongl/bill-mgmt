@@ -12,6 +12,7 @@
   },
   "bin": "./app.js",
   "pkg": {
+    "scripts": [],
     "assets": [
       "static/**/*"
     ],

@@ -77,7 +77,7 @@ const browser = os.platform() === 'linux' ? 'google-chrome' : (
 //For open browser automatically
 const openBrowser = function (cb) {
     return gulp.src(__filename)
-        .pipe(open({ app: browser, allowEmpty: true, uri: 'http://localhost:3000/doc' }));
+        .pipe(open({ app: browser, allowEmpty: true, uri: 'http://localhost:80/doc' }));
 }
 
 exports.serve = series(notify, parallel(serve, openBrowser, watch));

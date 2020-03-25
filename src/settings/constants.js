@@ -10,7 +10,7 @@ module.exports = {
   // Swagger rendering source file
   SWAGGER_DOC_JSON: '/doc/api.json',
   // Server port
-  PORT: 3000,
+  PORT: 80,
   // Pass for send email
   PASS: 'lrh0000',
   // Offical email from Ai Kan

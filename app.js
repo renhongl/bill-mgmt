@@ -60,7 +60,7 @@ app.use(
     },
     key: TOKEN_KEY,
   }).unless({
-    path: [/\/auth\/register/, /\/auth\/mail/, /\/auth\/login/, /\/doc/],
+    path: [/\/auth\/register/, /\/auth\/mail/, /\/auth\/login/, /\/doc/, /\/gui\/*/],
   }),
 );
 

@@ -11,6 +11,8 @@ const { getUser, updateUser } = require('./src/controller/user');
 const { register, login, verifyMail, keepAlive } = require('./src/controller/auth');
 const { searchUniversity, createUniversity, deleteUniversity, updateUniversity } = require('./src/controller/university');
 const { searchTeacher, createTeacher, deleteTeacher, updateTeacher } = require('./src/controller/teacher');
+const { searchStudent, createStudent, deleteStudent, updateStudent } = require('./src/controller/student');
+const { searchMaterial, createMaterial, deleteMaterial, updateMaterial } = require('./src/controller/material');
 const { connectDB } = require('./src/common/db');
 const { errorHandle } = require('./src/common/errorHandle');
 const {
@@ -79,6 +81,14 @@ router
   .post('/teacher', createTeacher)
   .delete('/teacher/:id', deleteTeacher)
   .put('/teacher/', updateTeacher)
+  .post('/student/search', searchStudent)
+  .post('/student', createStudent)
+  .delete('/student/:id', deleteStudent)
+  .put('/student/', updateStudent)
+  .post('/material/search', searchMaterial)
+  .post('/material', createMaterial)
+  .delete('/material/:id', deleteMaterial)
+  .put('/material/', updateMaterial)
 
 
 // Apply route middleware
@@ -99,4 +109,4 @@ app.listen(PORT);
 
 // Print log on console
 console.log('Server Running: http://localhost:' + PORT);
-console.log('Swagger Running: http://localhost:' + 3000 + '/doc');
+console.log('Swagger Running: http://localhost:' + PORT + '/doc');

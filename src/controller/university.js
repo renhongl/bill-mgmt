@@ -97,9 +97,6 @@ const createUniversity = async (ctx, next) => {
         }
 
         let uni = await University.find({ name: body.name });
-        if (!body.address) {
-            body.address = '未填写';
-        }
 
         if (!uni.length) {
             const newUniversity = new University(body);

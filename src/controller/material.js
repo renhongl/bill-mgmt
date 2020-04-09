@@ -100,6 +100,8 @@ const createMaterial = async (ctx, next) => {
             };
             return;
         }
+        const now = Date.now();
+        body.createTime = now;
 
         const newUniversity = new Material(body);
         let material = await newUniversity.save();

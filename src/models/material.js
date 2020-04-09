@@ -7,7 +7,9 @@ const MaterialSchema = new Schema({
   phone: String,
   uni: String,
   teacher: String,
-  price: String
+  price: String,
+  createTime: String,
+  pickUpTime: String
 });
 
 const Material = Mongoose.model('Material', MaterialSchema);

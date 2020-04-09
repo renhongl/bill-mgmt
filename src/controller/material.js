@@ -35,10 +35,14 @@ const searchMaterial = async (ctx, next) => {
             teaArr = await Material.find({}).sort({ [sortKey]: asc });
         } else {
             teaArr = await Material.find(
-                {$or:[{name: new RegExp("\w*"+ searchWord)},
-                {uni: new RegExp("\w*"+ searchWord)},
-                {phone: new RegExp("\w*"+ searchWord)}
-            ]}).sort({ [sortKey]: asc });
+                {
+                    $or: [{ name: new RegExp("\w*"+ searchWord) },
+                    { uni: new RegExp("\w*"+ searchWord) },
+                    { phone: new RegExp("\w*"+ searchWord) },
+                    { content: new RegExp("\w*"+ searchWord) },
+                    { teacher: new RegExp("\w*"+ searchWord) }
+                    ]
+                }).sort({ [sortKey]: asc });
         }
         totalRecords = teaArr.length;
         teaArr = teaArr.splice(index * total, total);
@@ -97,27 +101,15 @@ const createMaterial = async (ctx, next) => {
             return;
         }
 
-        let tea = await Material.find({ name: body.name });
-        if (!body.address) {
-            body.address = '未填写';
-        }
+        const newUniversity = new Material(body);
+        let material = await newUniversity.save();
+        ctx.status = 200;
+        ctx.body = {
+            code: 200,
+            message: 'Success',
+            data: material,
+        };
 
-        if (!tea.length) {
-            const newUniversity = new Material(body);
-            let material = await newUniversity.save();
-            ctx.status = 200;
-            ctx.body = {
-                code: 200,
-                message: 'Success',
-                data: material,
-            };
-        } else {
-            ctx.status = 406;
-            ctx.body = {
-                code: 406,
-                message: 'Material existed',
-            };
-        }
     } catch (error) {
         console.log(error);
         ctx.throw(500);
@@ -199,7 +191,7 @@ const deleteMaterial = async (ctx, next) => {
     try {
         const id = ctx.params.id;
         console.log('delete id: ' + id);
-        let tea = await Material.findOneAndDelete({_id: id});
+        let tea = await Material.findOneAndDelete({ _id: id });
         ctx.status = 200;
         if (tea) {
             ctx.body = {

@@ -37,7 +37,7 @@ const searchStudent = async (ctx, next) => {
             teaArr = await Student.find(
                 {$or:[{name: new RegExp("\w*"+ searchWord)},
                 {uni: new RegExp("\w*"+ searchWord)},
-                {phone: new RegExp("\w*"+ searchWord)}
+                {phone: searchWord}
             ]}).sort({ [sortKey]: asc });
         }
         totalRecords = teaArr.length;

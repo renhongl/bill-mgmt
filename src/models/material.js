@@ -3,10 +3,18 @@ const Schema = Mongoose.Schema;
 
 const MaterialSchema = new Schema({
   content: String,
-  name: String,
-  phone: String,
-  uni: String,
-  teacher: String,
+  student: {
+    type: Schema.Types.ObjectId,
+    ref: 'Student'
+  },
+  uni: {
+    type: Schema.Types.ObjectId,
+    ref: 'University'
+  },
+  teacher: {
+    type: Schema.Types.ObjectId,
+    ref: 'Teacher'
+  },
   price: String,
   createTime: String,
   pickUpTime: String

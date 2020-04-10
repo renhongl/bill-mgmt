@@ -3,8 +3,14 @@ const Schema = Mongoose.Schema;
 
 const StudentSchema = new Schema({
   name: String,
-  uni: String,
-  teacher: String,
+  uni: {
+    type: Schema.Types.ObjectId,
+    ref: 'University'
+  },
+  teacher: {
+    type: Schema.Types.ObjectId,
+    ref: 'Teacher'
+  },
   phone: String
 });
 

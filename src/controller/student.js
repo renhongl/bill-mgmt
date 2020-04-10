@@ -32,13 +32,13 @@ const searchStudent = async (ctx, next) => {
         let searchWord = body.searchWord || '';
         let teaArr, totalRecords;
         if (!searchWord) {
-            teaArr = await Student.find({}).sort({ [sortKey]: asc });
+            teaArr = await Student.find({}).populate('teacher').populate('uni').sort({ [sortKey]: asc });
         } else {
             teaArr = await Student.find(
                 {$or:[{name: new RegExp("\w*"+ searchWord)},
-                {uni: new RegExp("\w*"+ searchWord)},
+                // {uni: new RegExp("\w*"+ searchWord)},
                 {phone: searchWord}
-            ]}).sort({ [sortKey]: asc });
+            ]}).populate('teacher').populate('uni').sort({ [sortKey]: asc });
         }
         totalRecords = teaArr.length;
         teaArr = teaArr.splice(index * total, total);

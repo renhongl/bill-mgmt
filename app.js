@@ -10,9 +10,9 @@ const koaBody = require('koa-body');
 const { getUser, updateUser } = require('./src/controller/user');
 const { register, login, verifyMail, keepAlive } = require('./src/controller/auth');
 const { searchUniversity, createUniversity, deleteUniversity, updateUniversity } = require('./src/controller/university');
-const { searchTeacher, createTeacher, deleteTeacher, updateTeacher } = require('./src/controller/teacher');
+const { searchTeacher, createTeacher, deleteTeacher, updateTeacher, searchTeacherByUni } = require('./src/controller/teacher');
 const { searchStudent, createStudent, deleteStudent, updateStudent } = require('./src/controller/student');
-const { searchMaterial, createMaterial, deleteMaterial, updateMaterial } = require('./src/controller/material');
+const { searchMaterial, createMaterial, deleteMaterial, updateMaterial, getMaterialById } = require('./src/controller/material');
 const { connectDB } = require('./src/common/db');
 const { errorHandle } = require('./src/common/errorHandle');
 const {
@@ -81,6 +81,7 @@ router
   .post('/teacher', createTeacher)
   .delete('/teacher/:id', deleteTeacher)
   .put('/teacher/', updateTeacher)
+  .post('/teacher/search/uni', searchTeacherByUni)
   .post('/student/search', searchStudent)
   .post('/student', createStudent)
   .delete('/student/:id', deleteStudent)
@@ -89,6 +90,7 @@ router
   .post('/material', createMaterial)
   .delete('/material/:id', deleteMaterial)
   .put('/material/', updateMaterial)
+  .get('/material/get/:id', getMaterialById)
 
 
 // Apply route middleware

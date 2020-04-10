@@ -1,5 +1,63 @@
 const Teacher = require('../models/teacher');
 
+
+/**
+ * @swagger
+ * /teacher/search/uni:
+ *    post:
+ *      tags:
+ *        - Teacher
+ *      summary: Search teacher by university
+ *      requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#definitions/searchSchema"
+ *      produces:
+ *        - application/json
+ *      responses:
+ *        401:
+ *           description: Invalid token
+ *        200:
+ *          description: Success
+ *
+ */
+const searchTeacherByUni = async (ctx, next) => {
+    try {
+        const { body } = ctx.request;
+        let index = body.index || 0;
+        let total = body.total || 1000;
+        let sortKey = body.sortKey || 'name';
+        let asc = body.asc || 1;
+        let searchWord = body.searchWord || '';
+        let teaArr, totalRecords;
+        teaArr = await Teacher.find({}).populate('uni').sort({ [sortKey]: asc });
+        teaArr = teaArr.filter(item => item.uni.name === searchWord);
+
+        totalRecords = teaArr.length;
+        teaArr = teaArr.splice(index * total, total);
+        ctx.status = 200;
+        if (teaArr) {
+            ctx.body = {
+                code: 200,
+                message: 'Success',
+                data: teaArr,
+                total: totalRecords
+            };
+        } else {
+            ctx.body = {
+                code: 200,
+                message: `No data`,
+                data: null,
+            };
+        }
+    } catch (error) {
+        console.log(error);
+        ctx.throw(500);
+    }
+};
+
 /**
  * @swagger
  * /teacher/search:
@@ -32,14 +90,15 @@ const searchTeacher = async (ctx, next) => {
         let searchWord = body.searchWord || '';
         let teaArr, totalRecords;
         if (!searchWord) {
-            teaArr = await Teacher.find({}).sort({ [sortKey]: asc });
+            teaArr = await Teacher.find({}).populate('uni').sort({ [sortKey]: asc });
         } else {
             teaArr = await Teacher.find(
                 {$or:[{name: new RegExp("\w*"+ searchWord)},
-                {uni: new RegExp("\w*"+ searchWord)},
+                // {uni: new RegExp("\w*"+ searchWord)},
                 {phone: new RegExp("\w*"+ searchWord)}
-            ]}).sort({ [sortKey]: asc });
+            ]}).populate('uni').sort({ [sortKey]: asc });
         }
+        console.log(teaArr);
         totalRecords = teaArr.length;
         teaArr = teaArr.splice(index * total, total);
         ctx.status = 200;
@@ -225,4 +284,5 @@ module.exports = {
     createTeacher,
     deleteTeacher,
     updateTeacher,
+    searchTeacherByUni,
 };

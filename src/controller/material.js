@@ -32,17 +32,18 @@ const searchMaterial = async (ctx, next) => {
         let searchWord = body.searchWord || '';
         let teaArr, totalRecords;
         if (!searchWord) {
-            teaArr = await Material.find({}).sort({ [sortKey]: asc });
+            teaArr = await Material.find({}).populate('student').populate('uni').populate('teacher').sort({ [sortKey]: asc });
         } else {
             teaArr = await Material.find(
                 {
-                    $or: [{ name: new RegExp("\w*"+ searchWord) },
-                    { uni: new RegExp("\w*"+ searchWord) },
-                    { phone: new RegExp("\w*"+ searchWord) },
+                    $or: [
+                    // { name: new RegExp("\w*"+ searchWord) },
+                    // { uni: new RegExp("\w*"+ searchWord) },
+                    // { phone: new RegExp("\w*"+ searchWord) },
                     { content: new RegExp("\w*"+ searchWord) },
-                    { teacher: new RegExp("\w*"+ searchWord) }
+                    // { teacher: new RegExp("\w*"+ searchWord) }
                     ]
-                }).sort({ [sortKey]: asc });
+                }).populate('student').populate('uni').populate('teacher').sort({ [sortKey]: asc });
         }
         totalRecords = teaArr.length;
         teaArr = teaArr.splice(index * total, total);
@@ -92,11 +93,11 @@ const searchMaterial = async (ctx, next) => {
 const createMaterial = async (ctx, next) => {
     try {
         const { body } = ctx.request;
-        if (!body.name || !body.uni) {
+        if (!body.student || !body.uni) {
             ctx.status = 400;
             ctx.body = {
                 code: 400,
-                message: `Bad request, name and university is required`,
+                message: `Bad request, student and university is required`,
             };
             return;
         }
@@ -214,9 +215,58 @@ const deleteMaterial = async (ctx, next) => {
     }
 };
 
+
+/**
+ * @swagger
+ * /material/get/{id}:
+ *    get:
+ *      tags:
+ *        - Material
+ *      summary: Get material by ID
+ *      produces:
+ *        - application/json
+ *      parameters:
+ *       - name: id
+ *         description: Material id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *      responses:
+ *        401:
+ *           description: Invalid token
+ *        200:
+ *          description: Success
+ *
+ */
+const getMaterialById = async (ctx, next) => {
+    try {
+        const id = ctx.params.id;
+        let tea = await Material.find({ _id: id });
+        ctx.status = 200;
+        if (tea) {
+            ctx.body = {
+                code: 200,
+                message: 'Get Success',
+                data: tea[0],
+            };
+        } else {
+            ctx.body = {
+                code: 200,
+                message: `No data`,
+                data: null,
+            };
+        }
+    } catch (error) {
+        console.log(error);
+        ctx.throw(500);
+    }
+};
+
 module.exports = {
     searchMaterial,
     createMaterial,
     deleteMaterial,
     updateMaterial,
+    getMaterialById,
 };

@@ -454,14 +454,12 @@
             "description": "Invalid token"
           }
         }
-      }
-    },
-    "/material/get/{id}": {
+      },
       "get": {
         "tags": [
           "Material"
         ],
-        "summary": "Get material by ID",
+        "summary": "Get material by id",
         "produces": [
           "application/json"
         ],
@@ -577,6 +575,34 @@
           "Student"
         ],
         "summary": "Delete student",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Student id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Student"
+        ],
+        "summary": "Get student by id",
         "produces": [
           "application/json"
         ],
@@ -743,6 +769,34 @@
             "description": "Invalid token"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Teacher"
+        ],
+        "summary": "Get teacher by id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Teacher id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
       }
     },
     "/university/search": {
@@ -836,6 +890,34 @@
           "Univsersity"
         ],
         "summary": "Delete university",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "University id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Univsersity"
+        ],
+        "summary": "Get university by id",
         "produces": [
           "application/json"
         ],

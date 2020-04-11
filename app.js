@@ -9,10 +9,10 @@ const jwt = require('koa-jsonwebtoken').default;
 const koaBody = require('koa-body');
 const { getUser, updateUser } = require('./src/controller/user');
 const { register, login, verifyMail, keepAlive } = require('./src/controller/auth');
-const { searchUniversity, createUniversity, deleteUniversity, updateUniversity } = require('./src/controller/university');
-const { searchTeacher, createTeacher, deleteTeacher, updateTeacher, searchTeacherByUni } = require('./src/controller/teacher');
-const { searchStudent, createStudent, deleteStudent, updateStudent } = require('./src/controller/student');
-const { searchMaterial, createMaterial, deleteMaterial, updateMaterial, getMaterialById } = require('./src/controller/material');
+const { searchUniversity, createUniversity, deleteUniversity, updateUniversity, getUniversity } = require('./src/controller/university');
+const { searchTeacher, createTeacher, deleteTeacher, updateTeacher, searchTeacherByUni, getTeacher } = require('./src/controller/teacher');
+const { searchStudent, createStudent, deleteStudent, updateStudent, getStudent } = require('./src/controller/student');
+const { searchMaterial, createMaterial, deleteMaterial, updateMaterial, getMaterial } = require('./src/controller/material');
 const { connectDB } = require('./src/common/db');
 const { errorHandle } = require('./src/common/errorHandle');
 const {
@@ -60,7 +60,7 @@ app.use(
     },
     key: TOKEN_KEY,
   }).unless({
-    path: [/\/auth\/register/, /\/auth\/mail/, /\/auth\/login/, /\/doc/, /\/gui\/*/],
+    path: [/\/auth\/register/, /\/auth\/mail/, /\/auth\/login/, /\/doc/, /\/avator/, /\/common/, /\/gui\/*/],
   }),
 );
 
@@ -76,21 +76,24 @@ router
   .post('/university/search', searchUniversity)
   .post('/university', createUniversity)
   .delete('/university/:id', deleteUniversity)
+  .get('/university/:id', getUniversity)
   .put('/university/', updateUniversity)
   .post('/teacher/search', searchTeacher)
   .post('/teacher', createTeacher)
   .delete('/teacher/:id', deleteTeacher)
+  .get('/teacher/:id', getTeacher)
   .put('/teacher/', updateTeacher)
   .post('/teacher/search/uni', searchTeacherByUni)
   .post('/student/search', searchStudent)
   .post('/student', createStudent)
   .delete('/student/:id', deleteStudent)
+  .get('/student/:id', getStudent)
   .put('/student/', updateStudent)
   .post('/material/search', searchMaterial)
   .post('/material', createMaterial)
   .delete('/material/:id', deleteMaterial)
   .put('/material/', updateMaterial)
-  .get('/material/get/:id', getMaterialById)
+  .get('/material/:id', getMaterial)
 
 
 // Apply route middleware

@@ -216,9 +216,57 @@ const deleteUniversity = async (ctx, next) => {
     }
 };
 
+/**
+ * @swagger
+ * /university/{id}:
+ *    get:
+ *      tags:
+ *        - Univsersity
+ *      summary: Get university by id
+ *      produces:
+ *        - application/json
+ *      parameters:
+ *       - name: id
+ *         description: University id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *      responses:
+ *        401:
+ *           description: Invalid token
+ *        200:
+ *          description: Success
+ *
+ */
+const getUniversity = async (ctx, next) => {
+    try {
+        const id = ctx.params.id;
+        let uni = await University.findOne({_id: id});
+        ctx.status = 200;
+        if (uni) {
+            ctx.body = {
+                code: 200,
+                message: 'Get Success',
+                data: uni,
+            };
+        } else {
+            ctx.body = {
+                code: 200,
+                message: `No data`,
+                data: null,
+            };
+        }
+    } catch (error) {
+        console.log(error);
+        ctx.throw(500);
+    }
+};
+
 module.exports = {
     searchUniversity,
     createUniversity,
     deleteUniversity,
     updateUniversity,
+    getUniversity,
 };

@@ -279,10 +279,58 @@ const deleteTeacher = async (ctx, next) => {
     }
 };
 
+/**
+ * @swagger
+ * /teacher/{id}:
+ *    get:
+ *      tags:
+ *        - Teacher
+ *      summary: Get teacher by id
+ *      produces:
+ *        - application/json
+ *      parameters:
+ *       - name: id
+ *         description: Teacher id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *      responses:
+ *        401:
+ *           description: Invalid token
+ *        200:
+ *          description: Success
+ *
+ */
+const getTeacher = async (ctx, next) => {
+    try {
+        const id = ctx.params.id;
+        let tea = await Teacher.findOne({_id: id});
+        ctx.status = 200;
+        if (tea) {
+            ctx.body = {
+                code: 200,
+                message: 'Get Success',
+                data: tea,
+            };
+        } else {
+            ctx.body = {
+                code: 200,
+                message: `No data`,
+                data: null,
+            };
+        }
+    } catch (error) {
+        console.log(error);
+        ctx.throw(500);
+    }
+};
+
 module.exports = {
     searchTeacher,
     createTeacher,
     deleteTeacher,
     updateTeacher,
     searchTeacherByUni,
+    getTeacher,
 };

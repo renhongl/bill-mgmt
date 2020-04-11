@@ -218,11 +218,11 @@ const deleteMaterial = async (ctx, next) => {
 
 /**
  * @swagger
- * /material/get/{id}:
+ * /material/{id}:
  *    get:
  *      tags:
  *        - Material
- *      summary: Get material by ID
+ *      summary: Get material by id
  *      produces:
  *        - application/json
  *      parameters:
@@ -239,10 +239,10 @@ const deleteMaterial = async (ctx, next) => {
  *          description: Success
  *
  */
-const getMaterialById = async (ctx, next) => {
+const getMaterial = async (ctx, next) => {
     try {
         const id = ctx.params.id;
-        let tea = await Material.find({ _id: id });
+        let tea = await Material.findOne({ _id: id });
         ctx.status = 200;
         if (tea) {
             ctx.body = {
@@ -268,5 +268,5 @@ module.exports = {
     createMaterial,
     deleteMaterial,
     updateMaterial,
-    getMaterialById,
+    getMaterial,
 };

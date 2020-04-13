@@ -7,7 +7,7 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const jwt = require('koa-jsonwebtoken').default;
 const koaBody = require('koa-body');
-const { getUser, updateUser } = require('./src/controller/user');
+const { getUser, updateUser, searchUser, deleteUser, createUser } = require('./src/controller/user');
 const { register, login, verifyMail, keepAlive } = require('./src/controller/auth');
 const { searchUniversity, createUniversity, deleteUniversity, updateUniversity, getUniversity } = require('./src/controller/university');
 const { searchTeacher, createTeacher, deleteTeacher, updateTeacher, searchTeacherByUni, getTeacher } = require('./src/controller/teacher');
@@ -72,6 +72,9 @@ router
   .post('/auth/keepAlive', keepAlive)
   .get('/user/:id', getUser)
   .put('/user/:id', updateUser)
+  .post('/user/search', searchUser)
+  .post('/user/delete/:id', deleteUser)
+  .post('/user/:id', createUser)
   .post('/file/:type', fileUpload)
   .post('/university/search', searchUniversity)
   .post('/university', createUniversity)

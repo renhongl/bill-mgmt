@@ -117,6 +117,7 @@ const register = async ctx => {
       return;
     }
     body.password = await bcrypt.hash(body.password, 5);
+    body.auth = 1;
 
     let user = await User.find({ username: body.username });
 

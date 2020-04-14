@@ -484,6 +484,165 @@
         }
       }
     },
+    "/material/total/{timestamp}": {
+      "get": {
+        "tags": [
+          "Material"
+        ],
+        "summary": "Get total count of material",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "timestamp",
+            "description": "Time stamp",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/material/top/student/{timestamp}": {
+      "get": {
+        "tags": [
+          "Material"
+        ],
+        "summary": "Get top of student",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "timestamp",
+            "description": "Time stamp",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/material/top/teacher/{timestamp}": {
+      "get": {
+        "tags": [
+          "Material"
+        ],
+        "summary": "Get top of teacher",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "timestamp",
+            "description": "Time stamp",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/material/top/university/{timestamp}": {
+      "get": {
+        "tags": [
+          "Material"
+        ],
+        "summary": "Get top of university",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "timestamp",
+            "description": "Time stamp",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/material/trend/university/{timestamp}/{monthly}": {
+      "get": {
+        "tags": [
+          "Material"
+        ],
+        "summary": "Get trend of university",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "timestamp",
+            "description": "Time stamp",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "monthly",
+            "description": "Monthly data or year data",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
     "/student/search": {
       "post": {
         "tags": [

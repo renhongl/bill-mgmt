@@ -12,7 +12,7 @@ const { register, login, verifyMail, keepAlive } = require('./src/controller/aut
 const { searchUniversity, createUniversity, deleteUniversity, updateUniversity, getUniversity } = require('./src/controller/university');
 const { searchTeacher, createTeacher, deleteTeacher, updateTeacher, searchTeacherByUni, getTeacher } = require('./src/controller/teacher');
 const { searchStudent, createStudent, deleteStudent, updateStudent, getStudent } = require('./src/controller/student');
-const { searchMaterial, createMaterial, deleteMaterial, updateMaterial, getMaterial } = require('./src/controller/material');
+const { getTrendUniversityMaterial, getTopUniversityMaterial, getTopTeacherMaterial, searchMaterial, createMaterial, deleteMaterial, updateMaterial, getMaterial, getTotalMaterial, getTopStudentMaterial } = require('./src/controller/material');
 const { connectDB } = require('./src/common/db');
 const { errorHandle } = require('./src/common/errorHandle');
 const {
@@ -97,6 +97,11 @@ router
   .delete('/material/:id', deleteMaterial)
   .put('/material/', updateMaterial)
   .get('/material/:id', getMaterial)
+  .get('/material/total/:timestamp', getTotalMaterial)
+  .get('/material/top/student/:timestamp', getTopStudentMaterial)
+  .get('/material/top/teacher/:timestamp', getTopTeacherMaterial)
+  .get('/material/top/university/:timestamp', getTopUniversityMaterial)
+  .get('/material/trend/university/:timestamp/:monthly', getTrendUniversityMaterial)
 
 
 // Apply route middleware

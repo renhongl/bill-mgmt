@@ -590,6 +590,83 @@ const getTrendUniversityMaterial = async (ctx, next) => {
     }
 };
 
+/**
+ * @swagger
+ * /material/trend/teacher/{timestamp}/{monthly}:
+ *    get:
+ *      tags:
+ *        - Material
+ *      summary: Get trend of teacher
+ *      produces:
+ *        - application/json
+ *      parameters:
+ *       - name: timestamp
+ *         description: Time stamp
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: monthly
+ *         description: Monthly data or year data
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *      responses:
+ *        401:
+ *           description: Invalid token
+ *        200:
+ *          description: Success
+ *
+ */
+const getTrendTeacherMaterial = async (ctx, next) => {
+    try {
+        const timestamp = Number(ctx.params.timestamp);
+        const monthly = ctx.params.monthly;
+        const matArr = await Material.find({ createTime: { $gt: timestamp }}).populate('teacher');
+        const uniGroup = {};
+        for (let item of matArr) {
+            if (uniGroup[item.teacher.name + '-' + item.teacher._id] !== undefined) {
+                uniGroup[item.teacher.name + '-' + item.teacher._id].push(item);
+            } else {
+                uniGroup[item.teacher.name + '-' + item.teacher._id] = [item];
+            }
+        }
+        const keys = Object.keys(uniGroup);
+        for(let key of keys) {
+            const values = uniGroup[key];
+            const dateGrpup = {};
+            values.forEach((value) => {
+                if (monthly === 'true') {
+                    const month = new Date(Number(value.createTime)).getMonth() + 1;
+                    if(dateGrpup[month] !== undefined) {
+                        dateGrpup[month] += 1;
+                    } else {
+                        dateGrpup[month] = 1;
+                    }
+                } else {
+                    const date = new Date(Number(value.createTime)).getDate();
+                    if(dateGrpup[date] !== undefined) {
+                        dateGrpup[date] += 1;
+                    } else {
+                        dateGrpup[date] = 1;
+                    }
+                }
+            });
+            uniGroup[key] = dateGrpup;
+        }
+        ctx.status = 200;
+        ctx.body = {
+            code: 200,
+            message: `Success`,
+            data: uniGroup,
+        };
+    } catch (error) {
+        console.log(error);
+        ctx.throw(500);
+    }
+};
+
 module.exports = {
     searchMaterial,
     createMaterial,
@@ -601,4 +678,5 @@ module.exports = {
     getTopTeacherMaterial,
     getTopUniversityMaterial,
     getTrendUniversityMaterial,
+    getTrendTeacherMaterial,
 };

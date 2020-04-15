@@ -12,7 +12,7 @@ const { register, login, verifyMail, keepAlive } = require('./src/controller/aut
 const { searchUniversity, createUniversity, deleteUniversity, updateUniversity, getUniversity } = require('./src/controller/university');
 const { searchTeacher, createTeacher, deleteTeacher, updateTeacher, searchTeacherByUni, getTeacher } = require('./src/controller/teacher');
 const { searchStudent, createStudent, deleteStudent, updateStudent, getStudent } = require('./src/controller/student');
-const { getTrendUniversityMaterial, getTopUniversityMaterial, getTopTeacherMaterial, searchMaterial, createMaterial, deleteMaterial, updateMaterial, getMaterial, getTotalMaterial, getTopStudentMaterial } = require('./src/controller/material');
+const { getTrendTeacherMaterial, getTrendUniversityMaterial, getTopUniversityMaterial, getTopTeacherMaterial, searchMaterial, createMaterial, deleteMaterial, updateMaterial, getMaterial, getTotalMaterial, getTopStudentMaterial } = require('./src/controller/material');
 const { connectDB } = require('./src/common/db');
 const { errorHandle } = require('./src/common/errorHandle');
 const {
@@ -102,6 +102,7 @@ router
   .get('/material/top/teacher/:timestamp', getTopTeacherMaterial)
   .get('/material/top/university/:timestamp', getTopUniversityMaterial)
   .get('/material/trend/university/:timestamp/:monthly', getTrendUniversityMaterial)
+  .get('/material/trend/teacher/:timestamp/:monthly', getTrendTeacherMaterial)
 
 
 // Apply route middleware

@@ -12,7 +12,7 @@ const { register, login, verifyMail, keepAlive } = require('./src/controller/aut
 const { searchUniversity, createUniversity, deleteUniversity, updateUniversity, getUniversity } = require('./src/controller/university');
 const { searchTeacher, createTeacher, deleteTeacher, updateTeacher, searchTeacherByUni, getTeacher } = require('./src/controller/teacher');
 const { searchStudent, createStudent, deleteStudent, updateStudent, getStudent } = require('./src/controller/student');
-const { getTrendTeacherMaterial, getTrendUniversityMaterial, getTopUniversityMaterial, getTopTeacherMaterial, searchMaterial, createMaterial, deleteMaterial, updateMaterial, getMaterial, getTotalMaterial, getTopStudentMaterial } = require('./src/controller/material');
+const { downloadMaterial, getTrendTeacherMaterial, getTrendUniversityMaterial, getTopUniversityMaterial, getTopTeacherMaterial, searchMaterial, createMaterial, deleteMaterial, updateMaterial, getMaterial, getTotalMaterial, getTopStudentMaterial } = require('./src/controller/material');
 const { connectDB } = require('./src/common/db');
 const { errorHandle } = require('./src/common/errorHandle');
 const {
@@ -93,6 +93,7 @@ router
   .get('/student/:id', getStudent)
   .put('/student/', updateStudent)
   .post('/material/search', searchMaterial)
+  .post('/material/download', downloadMaterial)
   .post('/material', createMaterial)
   .delete('/material/:id', deleteMaterial)
   .put('/material/', updateMaterial)

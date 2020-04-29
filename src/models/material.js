@@ -16,8 +16,8 @@ const MaterialSchema = new Schema({
     ref: 'Teacher'
   },
   price: String,
-  createTime: String,
-  pickUpTime: String
+  createTime: Date,
+  pickUpTime: Date
 });
 
 const Material = Mongoose.model('Material', MaterialSchema);

@@ -682,6 +682,35 @@
         }
       }
     },
+    "/material/download": {
+      "post": {
+        "tags": [
+          "Material"
+        ],
+        "summary": "Download material",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/searchSchema"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
     "/student/search": {
       "post": {
         "tags": [

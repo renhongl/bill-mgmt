@@ -667,6 +667,80 @@ const getTrendTeacherMaterial = async (ctx, next) => {
     }
 };
 
+/**
+ * @swagger
+ * /material/download:
+ *    post:
+ *      tags:
+ *        - Material
+ *      summary: Download material
+ *      requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#definitions/searchSchema"
+ *      produces:
+ *        - application/json
+ *      responses:
+ *        401:
+ *           description: Invalid token
+ *        200:
+ *          description: Success
+ *
+ */
+const downloadMaterial = async (ctx, next) => {
+    try {
+        const { body } = ctx.request;
+        let date = body.date;
+        let type = body.type;
+        let matArr = [];
+        if (type === '全部') {
+            matArr = await Material.find(
+                {"createTime": {"$gte": new Date(date)}}
+            ).populate('student').populate('uni').populate('teacher');
+        } else if(type === '未取走') {
+            matArr = await Material.find(
+                {
+                    "createTime": {"$gte": new Date(date)},
+                    $or: [
+                        { pickUpTime: '' },
+                        { pickUpTime: undefined }
+                    ]
+                }
+            ).populate('student').populate('uni').populate('teacher');
+        } else {
+                matArr = await Material.find(
+                    {
+                        "createTime": {"$gte": new Date(date)},
+                        $or: [
+                            { pickUpTime: {$ne: ''} },
+                            { pickUpTime: {$ne: undefined} }
+                        ]
+                    }
+                ).populate('student').populate('uni').populate('teacher');
+        }
+        ctx.status = 200;
+        if (matArr) {
+            ctx.body = {
+                code: 200,
+                message: 'Success',
+                data: matArr,
+                total: matArr.length
+            };
+        } else {
+            ctx.body = {
+                code: 200,
+                message: `No data`,
+                data: null,
+            };
+        }
+    } catch (error) {
+        console.log(error);
+        ctx.throw(500);
+    }
+};
+
 module.exports = {
     searchMaterial,
     createMaterial,
@@ -679,4 +753,5 @@ module.exports = {
     getTopUniversityMaterial,
     getTrendUniversityMaterial,
     getTrendTeacherMaterial,
+    downloadMaterial,
 };

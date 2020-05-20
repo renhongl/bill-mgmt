@@ -11,7 +11,8 @@ const StudentSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Teacher'
   },
-  phone: String
+  phone: String,
+  deleted: Boolean,
 });
 
 const Student = Mongoose.model('Student', StudentSchema);

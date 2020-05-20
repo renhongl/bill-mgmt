@@ -32,10 +32,11 @@ const searchMaterial = async (ctx, next) => {
         let searchWord = body.searchWord || '';
         let teaArr, totalRecords;
         if (!searchWord) {
-            teaArr = await Material.find({}).populate('student').populate('uni').populate('teacher').sort({ [sortKey]: asc });
+            teaArr = await Material.find({deleted: false}).populate('student').populate('uni').populate('teacher').sort({ [sortKey]: asc });
         } else {
             teaArr = await Material.find(
                 {
+                    deleted: false,
                     $or: [
                         // { name: new RegExp("\w*"+ searchWord) },
                         // { uni: new RegExp("\w*"+ searchWord) },
@@ -103,6 +104,7 @@ const createMaterial = async (ctx, next) => {
         }
         const now = Date.now();
         body.createTime = now;
+        body.deleted = false;
 
         const newUniversity = new Material(body);
         let material = await newUniversity.save();
@@ -194,7 +196,7 @@ const deleteMaterial = async (ctx, next) => {
     try {
         const id = ctx.params.id;
         console.log('delete id: ' + id);
-        let tea = await Material.findOneAndDelete({ _id: id });
+        let tea = await Material.findOneAndUpdate({ _id: id }, {deleted: true});
         ctx.status = 200;
         if (tea) {
             ctx.body = {
@@ -289,8 +291,9 @@ const getMaterial = async (ctx, next) => {
 const getTotalMaterial = async (ctx, next) => {
     try {
         const timestamp = Number(ctx.params.timestamp);
-        const matArr = await Material.find({ createTime: { $gt: timestamp } });
+        const matArr = await Material.find({ deleted: false, createTime: { $gt: timestamp } });
         const unPickupArr = await Material.find({
+            deleted: false,
             createTime: { $gt: timestamp },
             $or: [
                 { pickUpTime: '' },
@@ -338,7 +341,7 @@ const getTotalMaterial = async (ctx, next) => {
 const getTopStudentMaterial = async (ctx, next) => {
     try {
         const timestamp = Number(ctx.params.timestamp);
-        const matArr = await Material.find({ createTime: { $gt: timestamp }}).populate('student');
+        const matArr = await Material.find({ deleted: false, createTime: { $gt: timestamp }}).populate('student');
         const mapping = {};
         let res = null;
         for (let item of matArr) {
@@ -405,7 +408,7 @@ const getTopStudentMaterial = async (ctx, next) => {
 const getTopTeacherMaterial = async (ctx, next) => {
     try {
         const timestamp = Number(ctx.params.timestamp);
-        const matArr = await Material.find({ createTime: { $gt: timestamp }}).populate('teacher');
+        const matArr = await Material.find({ deleted: false, createTime: { $gt: timestamp }}).populate('teacher');
         const mapping = {};
         let res = null;
         for (let item of matArr) {
@@ -472,7 +475,7 @@ const getTopTeacherMaterial = async (ctx, next) => {
 const getTopUniversityMaterial = async (ctx, next) => {
     try {
         const timestamp = Number(ctx.params.timestamp);
-        const matArr = await Material.find({ createTime: { $gt: timestamp }}).populate('uni');
+        const matArr = await Material.find({ deleted: false, createTime: { $gt: timestamp }}).populate('uni');
         const mapping = {};
         let res = null;
         for (let item of matArr) {
@@ -546,7 +549,7 @@ const getTrendUniversityMaterial = async (ctx, next) => {
     try {
         const timestamp = Number(ctx.params.timestamp);
         const monthly = ctx.params.monthly;
-        const matArr = await Material.find({ createTime: { $gt: timestamp }}).populate('uni');
+        const matArr = await Material.find({ deleted: false, createTime: { $gt: timestamp }}).populate('uni');
         const uniGroup = {};
         for (let item of matArr) {
             if (uniGroup[item.uni.name + '-' + item.uni._id] !== undefined) {
@@ -623,7 +626,7 @@ const getTrendTeacherMaterial = async (ctx, next) => {
     try {
         const timestamp = Number(ctx.params.timestamp);
         const monthly = ctx.params.monthly;
-        const matArr = await Material.find({ createTime: { $gt: timestamp }}).populate('teacher');
+        const matArr = await Material.find({ deleted: false, createTime: { $gt: timestamp }}).populate('teacher');
         const uniGroup = {};
         for (let item of matArr) {
             if (uniGroup[item.teacher.name + '-' + item.teacher._id] !== undefined) {
@@ -697,11 +700,12 @@ const downloadMaterial = async (ctx, next) => {
         let matArr = [];
         if (type === '全部') {
             matArr = await Material.find(
-                {"createTime": {"$gte": new Date(date)}}
+                {deleted: false, "createTime": {"$gte": new Date(date)}}
             ).populate('student').populate('uni').populate('teacher');
         } else if(type === '未取走') {
             matArr = await Material.find(
                 {
+                    deleted: false,
                     "createTime": {"$gte": new Date(date)},
                     $or: [
                         { pickUpTime: '' },
@@ -712,6 +716,7 @@ const downloadMaterial = async (ctx, next) => {
         } else {
                 matArr = await Material.find(
                     {
+                        deleted: false,
                         "createTime": {"$gte": new Date(date)},
                         $or: [
                             { pickUpTime: {$ne: ''} },

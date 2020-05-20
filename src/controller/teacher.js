@@ -1,5 +1,5 @@
 const Teacher = require('../models/teacher');
-
+const Student = require('../models/student');
 
 /**
  * @swagger
@@ -32,7 +32,7 @@ const searchTeacherByUni = async (ctx, next) => {
         let asc = body.asc || 1;
         let searchWord = body.searchWord || '';
         let teaArr, totalRecords;
-        teaArr = await Teacher.find({}).populate('uni').sort({ [sortKey]: asc });
+        teaArr = await Teacher.find({deleted: false}).populate('uni').sort({ [sortKey]: asc });
         teaArr = teaArr.filter(item => item.uni.name === searchWord);
 
         totalRecords = teaArr.length;
@@ -90,7 +90,7 @@ const searchTeacher = async (ctx, next) => {
         let searchWord = body.searchWord || '';
         let teaArr, totalRecords;
         if (!searchWord) {
-            teaArr = await Teacher.find({}).populate('uni').sort({ [sortKey]: asc });
+            teaArr = await Teacher.find({deleted: false}).populate('uni').sort({ [sortKey]: asc });
         } else {
             teaArr = await Teacher.find(
                 {$or:[{name: new RegExp("\w*"+ searchWord)},
@@ -162,6 +162,7 @@ const createTeacher = async (ctx, next) => {
         }
 
         if (!tea.length) {
+            body.deleted = false;
             const newUniversity = new Teacher(body);
             let teacher = await newUniversity.save();
             ctx.status = 200;
@@ -258,7 +259,19 @@ const deleteTeacher = async (ctx, next) => {
     try {
         const id = ctx.params.id;
         console.log('delete id: ' + id);
-        let tea = await Teacher.findOneAndDelete({_id: id});
+        let students = await Student.find({deleted: false}).populate('teacher');
+        students = students.filter((student) => {
+            console.log('tea id: ' + student.teacher._id.toString() === id);
+            return student.teacher._id.toString() === id;
+        });
+        if (students && students.length > 0) {
+            return ctx.body = {
+                code: 406,
+                message: '有其他学生关联该老师，请先删除学生。',
+                data: null,
+            };
+        }
+        let tea = await Teacher.findOneAndUpdate({_id: id}, {deleted: true});
         ctx.status = 200;
         if (tea) {
             ctx.body = {

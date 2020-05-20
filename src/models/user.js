@@ -7,7 +7,8 @@ const userSchema = new Schema({
   mail: String,
   avator: String,
   auth: Number,
-  createDate: String
+  createDate: String,
+  deleted: Boolean,
 });
 
 const User = Mongoose.model('User', userSchema);

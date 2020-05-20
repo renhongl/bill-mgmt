@@ -17,7 +17,8 @@ const MaterialSchema = new Schema({
   },
   price: String,
   createTime: Date,
-  pickUpTime: Date
+  pickUpTime: Date,
+  deleted: Boolean,
 });
 
 const Material = Mongoose.model('Material', MaterialSchema);

@@ -32,9 +32,11 @@ const searchUniversity = async (ctx, next) => {
         let searchWord = body.searchWord || '';
         let uniArr, totalRecords;
         if (!searchWord) {
-            uniArr = await University.find({}).sort({ [sortKey]: asc });
+            uniArr = await University.find({deleted: false}).sort({ [sortKey]: asc });
         } else {
-            uniArr = await University.find({$or:[{
+            uniArr = await University.find({
+                deleted: false,
+                $or:[{
                 name: new RegExp("\w*"+ searchWord)},
                 {address: new RegExp("\w*"+ searchWord)
             }]}).sort({ [sortKey]: asc });
@@ -99,6 +101,7 @@ const createUniversity = async (ctx, next) => {
         let uni = await University.find({ name: body.name });
 
         if (!uni.length) {
+            body.deleted = false;
             const newUniversity = new University(body);
             let university = await newUniversity.save();
             ctx.status = 200;
@@ -195,7 +198,7 @@ const deleteUniversity = async (ctx, next) => {
     try {
         const id = ctx.params.id;
         console.log('delete id: ' + id);
-        let uni = await University.findOneAndDelete({_id: id});
+        let uni = await University.findOneAndUpdate({_id: id}, {deleted: true});
         ctx.status = 200;
         if (uni) {
             ctx.body = {

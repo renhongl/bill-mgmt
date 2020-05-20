@@ -1,4 +1,5 @@
 const Student = require('../models/student');
+const Material = require('../models/material');
 
 /**
  * @swagger
@@ -32,10 +33,12 @@ const searchStudent = async (ctx, next) => {
         let searchWord = body.searchWord || '';
         let teaArr, totalRecords;
         if (!searchWord) {
-            teaArr = await Student.find({}).populate('teacher').populate('uni').sort({ [sortKey]: asc });
+            teaArr = await Student.find({deleted: false}).populate('teacher').populate('uni').sort({ [sortKey]: asc });
         } else {
             teaArr = await Student.find(
-                {$or:[{name: new RegExp("\w*"+ searchWord)},
+                {
+                deleted: false,
+                $or:[{name: new RegExp("\w*"+ searchWord)},
                 // {uni: new RegExp("\w*"+ searchWord)},
                 {phone: searchWord}
             ]}).populate('teacher').populate('uni').sort({ [sortKey]: asc });
@@ -97,12 +100,22 @@ const createStudent = async (ctx, next) => {
             return;
         }
 
+        let temp = await Student.find({ phone: body.phone });
+        if (temp.length !== 0) {
+            ctx.status = 200;
+            return ctx.body = {
+                code: 406,
+                message: '学生的手机号重复，请使用其他手机号。',
+            };
+        }
+
         let tea = await Student.find({ name: body.name });
         if (!body.address) {
             body.address = '未填写';
         }
 
         if (!tea.length) {
+            body.deleted = false;
             const newUniversity = new Student(body);
             let student = await newUniversity.save();
             ctx.status = 200;
@@ -199,7 +212,19 @@ const deleteStudent = async (ctx, next) => {
     try {
         const id = ctx.params.id;
         console.log('delete id: ' + id);
-        let tea = await Student.findOneAndDelete({_id: id});
+        let materials = await Material.find({deleted: false}).populate('student');
+        materials = materials.filter((material) => {
+            console.log('stu id: ' + material.student._id.toString() === id);
+            return material.student._id.toString() === id;
+        });
+        if (materials && materials.length > 0) {
+            return ctx.body = {
+                code: 406,
+                message: '有材料关联该学生，请先删除材料。',
+                data: null,
+            };
+        }
+        let tea = await Student.findOneAndUpdate({_id: id}, {deleted: true});
         ctx.status = 200;
         if (tea) {
             ctx.body = {

@@ -8,6 +8,7 @@ const TeacherSchema = new Schema({
     ref: 'University'
   },
   phone: String,
+  deleted: Boolean,
 });
 
 const Teacher = Mongoose.model('Teacher', TeacherSchema);
